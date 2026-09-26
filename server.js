@@ -31,5 +31,5 @@ sv.on('connection', (socket) => {
 
 server.listen(3000, ()=> {
 
-    console.log('Servidor en http://localhost:3000')
+    console.log('Servidor en https://app-streaming-one.vercel.app/')
 })
