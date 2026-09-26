@@ -8,7 +8,7 @@ const server = http.createServer(app)
 
 const sv = new Server(server)
 
-app.use(express.static('.'))
+app.use(express.static('public'))
 
 sv.on('connection', (socket) => {
 
@@ -31,5 +31,5 @@ sv.on('connection', (socket) => {
 
 server.listen(3000, ()=> {
 
-    console.log('Servidor en https://app-streaming-one.vercel.app/')
+    console.log('Servidor en http://localhost:3000')
 })
