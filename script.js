@@ -1,15 +1,72 @@
+const socket = io()
+
 const button = document.getElementById('shareButton')
-const video = document.getElementById('screen')
+// const video = document.getElementById('screen')
 
 const videoRemote = document.getElementById('remote')
-const buttonRemote = document.getElementById('reciveRemote')
+// const buttonRemote = document.getElementById('reciveRemote')
 
-const answerInput = document.getElementById('answerInput')
-const buttonResponseInput = document.getElementById('responseInput')
+// const answerInput = document.getElementById('answerInput')
+// const buttonResponseInput = document.getElementById('responseInput')
 
-const offerInput = document.getElementById('offerInput')
+// const offerInput = document.getElementById('offerInput')
+
 
 let peer
+
+
+
+socket.on('offer', async (offer)=> {
+
+    console.log('oferta recibida N')
+
+    peer = new RTCPeerConnection()
+
+    peer.ontrack = (event)=> {
+
+        videoRemote.srcObject = event.streams[0]
+    }
+
+    await peer.setRemoteDescription(offer)
+
+    console.log('oferta aplicada N')
+
+
+
+    const answer = await peer.createAnswer()
+
+    await peer.setLocalDescription(answer)
+
+    await new Promise(resolve => {
+
+        if (peer.iceGatheringState === 'complete'){
+
+            resolve()
+
+            return
+        }
+
+        peer.onicegatheringstatechange = ()=> {
+
+            if (peer.iceGatheringState === 'complete'){
+
+                resolve()
+            }
+        }
+    })
+
+
+    socket.emit('answer', peer.localDescription)
+    console.log('respuesta enviada')
+
+})
+
+socket.on('answer', async (answer)=> {
+
+        await peer.setRemoteDescription(answer)
+
+        console.log('conexion exitosa')
+    })
 
 button.addEventListener("click", async() => {
 
@@ -55,7 +112,7 @@ button.addEventListener("click", async() => {
         })
 
         console.log("4")
-        console.log(JSON.stringify(peer.localDescription))
+        socket.emit('offer', peer.localDescription)
 
     }catch(error){
 
@@ -63,55 +120,55 @@ button.addEventListener("click", async() => {
     }
 })
 
-buttonResponseInput.addEventListener("click", async() =>{
+// buttonResponseInput.addEventListener("click", async() =>{
 
-    const answerRemote = JSON.parse(answerInput.value)
+//     const answerRemote = JSON.parse(answerInput.value)
 
-     await peer.setRemoteDescription(answerRemote)
-})
-
-
-buttonRemote.addEventListener("click", async() => {
-
-    try{
-
-        peer = new RTCPeerConnection();
-
-        peer.ontrack = (event) => {
-
-            videoRemote.srcObject = event.streams[0]
-        }
-
-        const offer = JSON.parse(offerInput.value)
-
-        await peer.setRemoteDescription(offer)
-
-        const answer = await peer.createAnswer()
-
-        await peer.setLocalDescription(answer)
+//      await peer.setRemoteDescription(answerRemote)
+// })
 
 
-        await new Promise(resolve => {
+// buttonRemote.addEventListener("click", async() => {
 
-            if (peer.iceGatheringState === "complete"){
+//     try{
 
-                resolve()
+//         peer = new RTCPeerConnection();
 
-                return
-            }
+//         peer.ontrack = (event) => {
 
-            peer.onicegatheringstatechange = () => {
+//             videoRemote.srcObject = event.streams[0]
+//         }
 
-                if (peer.iceGatheringState === "complete") {
-                    resolve()
-                }
-            }
-        })
+//         const offer = JSON.parse(offerInput.value)
 
-        console.log(JSON.stringify(peer.localDescription))
+//         await peer.setRemoteDescription(offer)
 
-    } catch(error){
+//         const answer = await peer.createAnswer()
 
-        console.error(error)
-    }
-})
+//         await peer.setLocalDescription(answer)
+
+
+//         await new Promise(resolve => {
+
+//             if (peer.iceGatheringState === "complete"){
+
+//                 resolve()
+
+//                 return
+//             }
+
+//             peer.onicegatheringstatechange = () => {
+
+//                 if (peer.iceGatheringState === "complete") {
+//                     resolve()
+//                 }
+//             }
+//         })
+
+//         console.log(JSON.stringify(peer.localDescription))
+
+//     } catch(error){
+
+//         console.error(error)
+//     }
+// })
