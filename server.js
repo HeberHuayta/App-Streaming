@@ -1,12 +1,13 @@
 const express = require('express')
 const http = require('http')
+const path = require('path')
 const {Server} = require('socket.io')
 
 
 const app = express()
 
 app.get('/', (req, res) => {
-    res.send('Servidor funcionando')
+    res.sendFile(path.join(__dirname, 'public', 'index.html'))
 })
 
 const server = http.createServer(app)
