@@ -4,6 +4,11 @@ const {Server} = require('socket.io')
 
 
 const app = express()
+
+app.get('/', (req, res) => {
+    res.send('Servidor funcionando')
+})
+
 const server = http.createServer(app)
 
 const sv = new Server(server)
