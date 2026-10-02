@@ -71,6 +71,14 @@ socket.on('answer', async (answer)=> {
         await peer.setRemoteDescription(answer)
 
         console.log('conexion exitosa')
+
+
+        const stats = await peer.getStats()
+
+        stats.forEach(report => {
+
+            console.log(report)
+        })
     })
 
 button.addEventListener("click", async() => {
@@ -105,7 +113,7 @@ button.addEventListener("click", async() => {
                     parameters.encodings = [{}]
                 }
 
-                parameters.encodings[0].maxBitrate = 12_000_000
+                parameters.encodings[0].maxBitrate = 15_000_000
 
                 await senderTrack.setParameters(parameters);
             }
@@ -147,6 +155,7 @@ button.addEventListener("click", async() => {
         console.error(error)
     }
 })
+
 
 // buttonResponseInput.addEventListener("click", async() =>{
 
