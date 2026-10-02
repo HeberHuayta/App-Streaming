@@ -1,4 +1,6 @@
-const socket = io()
+const socket = io({
+    transports: ['websocket']
+})
 
 const button = document.getElementById('shareButton')
 // const video = document.getElementById('screen')
