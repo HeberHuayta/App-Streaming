@@ -14,6 +14,8 @@ const videoRemote = document.getElementById('remote')
 
 // const offerInput = document.getElementById('offerInput')
 
+const fullScreenButton = document.getElementById('fullScreenButton')
+
 
 let peer
 
@@ -198,3 +200,9 @@ button.addEventListener("click", async() => {
 //         console.error(error)
 //     }
 // })
+
+
+fullScreenButton.addEventListener('click', ()=> {
+    
+    videoRemote.requestFullscreen()
+})
