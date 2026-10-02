@@ -1,6 +1,7 @@
 const socket = io({
     transports: ['websocket']
 })
+//  fix error 400
 
 const button = document.getElementById('shareButton')
 // const video = document.getElementById('screen')
