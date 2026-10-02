@@ -77,17 +77,40 @@ button.addEventListener("click", async() => {
         
         const stream = await navigator.mediaDevices.getDisplayMedia({
 
-            video: true,
+            video: {
+
+                width: { ideal: 1920},
+                height: {ideal: 1080},
+                frameRate: {ideal: 60, max: 90}
+            },
             audio: true
         })
 
         peer = new RTCPeerConnection();
 
-        stream.getTracks().forEach(track => {
 
-            peer.addTrack(track, stream)
+
+        stream.getTracks().forEach( async track => {
+
+            const senderTrack = peer.addTrack(track, stream)
+
+            if (track.kind === 'video'){
+
+                const parameters = senderTrack.getParameters()
+
+                if(!parameters.encodings){
+
+                    parameters.encodings = [{}]
+                }
+
+                parameters.encodings[0].maxBitrate = 12_000_000
+
+                await senderTrack.setParameters(parameters);
+            }
         })
         
+
+
         console.log("1")
         const offer = await peer.createOffer()
         console.log("2")
