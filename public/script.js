@@ -66,20 +66,32 @@ socket.on('offer', async (offer)=> {
 
 })
 
-socket.on('answer', async (answer)=> {
+socket.on('answer', async (answer) => {
 
-        await peer.setRemoteDescription(answer)
+    await peer.setRemoteDescription(answer)
 
-        console.log('conexion exitosa')
+    console.log('conexion exitosa')
 
+
+
+
+    setInterval(async () => {
 
         const stats = await peer.getStats()
 
         stats.forEach(report => {
 
-            console.log(report)
+            if (
+                report.type === 'outbound-rtp' &&
+                report.kind == 'video'
+            ) {
+                console.log(report)
+            }
+
         })
-    })
+    },2000)
+
+})
 
 button.addEventListener("click", async() => {
 
@@ -97,6 +109,7 @@ button.addEventListener("click", async() => {
         })
 
         peer = new RTCPeerConnection();
+
 
 
 
