@@ -24,7 +24,13 @@ socket.on('offer', async (offer)=> {
 
     console.log('oferta recibida N')
 
-    peer = new RTCPeerConnection()
+    peer = new RTCPeerConnection({
+        iceServers: [
+            {
+                urls: 'stun:stun.l.google.com:19302'
+            }
+        ]
+    })
 
     peer.ontrack = (event)=> {
 
@@ -107,7 +113,13 @@ button.addEventListener("click", async() => {
             audio: true
         })
 
-        peer = new RTCPeerConnection();
+        peer = new RTCPeerConnection({
+            iceServers: [
+                {
+                    urls: 'stun:stun.l.google.com:19302'
+                }
+            ]
+        })
 
 
 
