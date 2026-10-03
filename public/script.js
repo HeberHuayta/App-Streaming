@@ -16,7 +16,7 @@ const videoRemote = document.getElementById('remote')
 
 const fullScreenButton = document.getElementById('fullScreenButton')
 
-const videoContainer = document.getElementById('videoConteiner')
+const videoContainer = document.getElementById('videoContainer')
 
 
 let peer
